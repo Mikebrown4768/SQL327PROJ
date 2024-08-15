@@ -1,0 +1,174 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema Team_5A_PolishIT
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema Team_5A_PolishIT
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `Team_5A_PolishIT` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `Team_5A_PolishIT` ;
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Salary`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Salary` (
+  `Salary_id` INT NOT NULL,
+  `contract_type` VARCHAR(45) NOT NULL,
+  `salary_from` VARCHAR(45) NOT NULL,
+  `salary_to` VARCHAR(45) NOT NULL,
+  `salary_currency` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Salary_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Location`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Location` (
+  `Location_id` INT NOT NULL,
+  `city` VARCHAR(45) NOT NULL,
+  `country_code` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Location_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Company size`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Company size` (
+  `company_size_id` INT NOT NULL,
+  `company_size_from` INT NOT NULL,
+  `company_size_to` INT NOT NULL,
+  PRIMARY KEY (`company_size_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Marker Icon`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Marker Icon` (
+  `Marker_icon_id` INT NOT NULL,
+  `marker` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Marker_icon_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Experience level`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Experience level` (
+  `Experience_level_id` INT NOT NULL,
+  `experence_level` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Experience_level_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Job posting`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Job posting` (
+  `Job_id` INT NOT NULL,
+  `Salary_id` INT NOT NULL,
+  `Location_id` INT NOT NULL,
+  `company_size_id` INT NOT NULL,
+  `Marker_icon_id` INT NOT NULL,
+  `Title` VARCHAR(45) NOT NULL,
+  `Workplace_type` VARCHAR(45) NOT NULL,
+  `Published_at` DATE NOT NULL,
+  `Remote_interview` VARCHAR(45) NOT NULL,
+  `Remote` VARCHAR(45) NOT NULL,
+  `Open_to_hire_ukrainians` VARCHAR(45) NOT NULL,
+  `Contract_type` VARCHAR(45) NOT NULL,
+  `Experience_level_id` INT NOT NULL,
+  PRIMARY KEY (`Job_id`),
+  INDEX `fk_Job posting_Salary_idx` (`Salary_id` ASC) VISIBLE,
+  INDEX `fk_Job posting_Location1_idx` (`Location_id` ASC) VISIBLE,
+  INDEX `fk_Job posting_Company size1_idx` (`company_size_id` ASC) VISIBLE,
+  INDEX `fk_Job posting_Marker Icon1_idx` (`Marker_icon_id` ASC) VISIBLE,
+  INDEX `fk_Job posting_Experience level1_idx` (`Experience_level_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Job posting_Salary`
+    FOREIGN KEY (`Salary_id`)
+    REFERENCES `Team_5A_PolishIT`.`Salary` (`Salary_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Job posting_Location1`
+    FOREIGN KEY (`Location_id`)
+    REFERENCES `Team_5A_PolishIT`.`Location` (`Location_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Job posting_Company size1`
+    FOREIGN KEY (`company_size_id`)
+    REFERENCES `Team_5A_PolishIT`.`Company size` (`company_size_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Job posting_Marker Icon1`
+    FOREIGN KEY (`Marker_icon_id`)
+    REFERENCES `Team_5A_PolishIT`.`Marker Icon` (`Marker_icon_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Job posting_Experience level1`
+    FOREIGN KEY (`Experience_level_id`)
+    REFERENCES `Team_5A_PolishIT`.`Experience level` (`Experience_level_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Skill Value`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Skill Value` (
+  `Skill_value_id` INT NOT NULL,
+  `skill_value` INT NOT NULL,
+  PRIMARY KEY (`Skill_value_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Skills`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Skills` (
+  `Skill_id` INT NOT NULL,
+  `skill_name` VARCHAR(45) NOT NULL,
+  `Skill_value_id` INT NOT NULL,
+  PRIMARY KEY (`Skill_id`),
+  INDEX `fk_Skills_Skill Value1_idx` (`Skill_value_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Skills_Skill Value1`
+    FOREIGN KEY (`Skill_value_id`)
+    REFERENCES `Team_5A_PolishIT`.`Skill Value` (`Skill_value_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Team_5A_PolishIT`.`Skills_has_Job posting`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Team_5A_PolishIT`.`Skills_has_Job posting` (
+  `Skills_Skill_id` INT NOT NULL,
+  `Job posting_Job_id` INT NOT NULL,
+  PRIMARY KEY (`Skills_Skill_id`, `Job posting_Job_id`),
+  INDEX `fk_Skills_has_Job posting_Job posting1_idx` (`Job posting_Job_id` ASC) VISIBLE,
+  INDEX `fk_Skills_has_Job posting_Skills1_idx` (`Skills_Skill_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Skills_has_Job posting_Skills1`
+    FOREIGN KEY (`Skills_Skill_id`)
+    REFERENCES `Team_5A_PolishIT`.`Skills` (`Skill_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Skills_has_Job posting_Job posting1`
+    FOREIGN KEY (`Job posting_Job_id`)
+    REFERENCES `Team_5A_PolishIT`.`Job posting` (`Job_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
