@@ -117,3 +117,24 @@ JOIN
     
     SELECT * FROM View_Skills_And_Values;
 
+# QUERY 6
+-- Involves multiple tables (Requirement A) , Aggregation (Requirement C).
+DROP VIEW IF EXISTS View_Avg_Salary_By_Location;
+
+-- Create the new view
+CREATE VIEW View_Avg_Salary_By_Location AS
+SELECT 
+    l.city, 
+    l.country_code, 
+    AVG(s.salary_from + s.salary_to) / 2 AS avg_salary
+FROM 
+    `job posting` jp
+JOIN 
+    `salary` s ON jp.Salary_id = s.Salary_id
+JOIN 
+    `location` l ON jp.Location_id = l.Location_id
+GROUP BY 
+    l.city, l.country_code;
+    
+        SELECT * FROM View_Avg_Salary_By_Location;
+   
