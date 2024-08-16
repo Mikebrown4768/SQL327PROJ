@@ -23,9 +23,9 @@ GROUP BY
     s.salary_from, 
     s.salary_to, 
     s.salary_currency;
+    
+    SELECT * FROM View_Job_Postings_Salary_GBP;
 
--- Test QUERY 1
-SELECT * FROM View_Job_Postings_Salary_GBP;
 
 # QUERY 2
 -- Requirements: Involves multiple tables (Requirement A), Filtering (Requirement B).
@@ -48,11 +48,11 @@ JOIN
 WHERE 
     el.experence_level = 'junior';
 
--- Test QUERY 2
 SELECT * FROM View_Skills_By_Experience_Level;
 
 # QUERY 3
 -- Requirements: Involves multiple tables (Requirement A), Filtering (Requirement B).
+-- Drop the existing view if it exists
 -- Drop the existing view if it exists
 DROP VIEW IF EXISTS View_Jobs_Remote_Interview1;
 
@@ -68,14 +68,13 @@ FROM
 JOIN 
     `location` l ON jp.Location_id = l.Location_id
 WHERE 
-    jp.Remote_interview = 'TRUE';  -- Ensure that TRUE is the correct value
+    jp.Remote_interview = 'TRUE';
 
 -- Test QUERY 3
 SELECT * FROM View_Jobs_Remote_Interview1;
 
 # QUERY 4
 -- Requirements: Involves multiple tables (Requirement A), Filtering (Requirement B), Subquery (Requirement E).
--- Drop the existing view if it exists
 -- Drop the existing view if it exists
 DROP VIEW IF EXISTS View_Skills_for_Job_Postings;
 
@@ -90,7 +89,13 @@ FROM
 JOIN 
     `skills and values` sav ON jp.Job_id = sav.`Job posting_Job_id`
 JOIN 
-    `skills` s ON sav.Skills_Skill_id = s.Skill_id;
+    `skills` s ON sav.Skills_Skill_id = s.Skill_id
+WHERE 
+    jp.Job_id IN (
+        SELECT Job_id 
+        FROM `job posting` 
+        WHERE Remote_interview = 'TRUE'
+    );
 
 -- Test QUERY 4
 SELECT * FROM View_Skills_for_Job_Postings;
